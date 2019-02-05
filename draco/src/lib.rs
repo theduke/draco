@@ -1,3 +1,13 @@
+
+// Depend on draco_macros and re-export everything in it.
+// This allows users to just depend on draco and get access
+// to the proc macros.
+#[allow(unused_imports)]
+#[macro_use]
+extern crate draco_macros;
+#[doc(hidden)]
+pub use draco_macros::*;
+
 #[macro_use]
 pub mod console;
 pub mod app;

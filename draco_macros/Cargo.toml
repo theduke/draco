@@ -1,0 +1,15 @@
+[package]
+name = "draco_macros"
+version = "0.1.0"
+authors = ["Christoph Herzog <chris@theduke.at>"]
+edition = "2018"
+
+[lib]
+proc-macro = true
+
+[dependencies]
+syn = { version = "0.15.26", features = ["full"] }
+quote = "0.6.11"
+proc-macro2 = "0.4.26"
+pest = "2.1.0"
+pest_derive = "2.1.0"

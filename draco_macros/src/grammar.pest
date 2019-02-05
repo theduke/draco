@@ -1,0 +1,45 @@
+WHITESPACE = _{ " " | "\t" | "\r" | "\n" }
+// COMMENT = _{ "/*" ~ (!"*/" ~ ANY)* ~ "*/" }
+COMMENT = _{ "//" ~ (!"\n" ~ ANY*) ~ "\n" }
+
+word = @{ ASCII_ALPHA ~ ASCII_ALPHANUMERIC* }
+word_silent = _{ word }
+
+tagname_regular = @{ ASCII_ALPHA_LOWER+ }
+tagname_component = @{ ASCII_ALPHA_UPPER ~  ASCII_ALPHANUMERIC* }
+tagname = _{ tagname_regular | tagname_component }
+
+block_hashed = { ("#" ~ "{" | "{") ~ ( ( !("{" | "}") ~ ANY ) | block_hashed )* ~ "}" }
+block_regular = { "{" ~ ( ( !("{" | "}") ~ ANY ) | block_regular  )* ~ "}" }
+literal_string = @{ "\"" ~ ( !"\"" ~ ANY )* ~ "\"" }
+
+literal_char = @{  !("{" | "}" | "<" | ">" | "\"" | WHITESPACE) ~ ANY   }
+literal_word = @{ literal_char+ }
+literal = { literal_word+ }
+
+arg = { word ~ ( "=" ~ (block_regular | literal_string) )? }
+
+args= {  arg ~ arg* }
+
+args_opt = { args? }
+
+tag_short = { "<" ~ tagname ~ args_opt  ~ "/" ~ ">" }
+
+node = { tag | block_hashed | literal_string | literal }
+nodes_opt = { node* }
+
+tag_full = { 
+    "<" ~ PUSH(tagname) ~ args_opt  ~ ">" 
+    ~ nodes_opt
+    ~  "<" ~ "/" ~ POP ~ ">" 
+}
+
+tag = { tag_short | tag_full }
+
+nodes = { node+ }
+
+html = _{
+    SOI
+    ~ nodes
+    ~ EOI
+}
