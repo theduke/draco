@@ -68,6 +68,13 @@ where
         self
     }
 
+    pub fn attribute_cond(mut self, name: impl Into<S>, flag: bool) -> Self {
+        if flag {
+            self.aspects.push(Attribute::new(name, "").into());
+        }
+        self
+    }
+
     pub fn property(mut self, name: impl Into<S>, value: impl Into<property::Value>) -> Self {
         self.aspects.push(Property::new(name, value).into());
         self
