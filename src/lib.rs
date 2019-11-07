@@ -25,10 +25,14 @@ pub use self::mailbox::Mailbox;
 pub use self::property::Property;
 pub use self::subscription::{Subscription, Unsubscribe};
 pub use self::velement::{h, s};
-pub use self::velement::{VElement, VKeyedElement, VNonKeyedElement};
+pub use self::velement::{VElement, VKeyedElement, VNonKeyedElement, Ns as Namespace};
 pub use self::vnode::VNode;
 pub use self::vtext::VText;
 use std::borrow::Cow;
+
+#[cfg(feature = "rsx")]
+#[proc_macro_hack::proc_macro_hack(support_nested)]
+pub use draco_macros::rsx;
 
 pub type S = Cow<'static, str>;
 
